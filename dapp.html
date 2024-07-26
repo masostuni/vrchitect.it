@@ -9,7 +9,7 @@
     <h1>Interazione con Smart Contract</h1>
     <button id="interact-contract">Interagisci con il contratto</button>
     
-    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script>
         document.getElementById('interact-contract').onclick = async () => {
             const contractAddress = 'INDIRIZZO_DEL_CONTRATTO';
@@ -18,12 +18,12 @@
             ];
 
             if (window.ethereum) {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
-                const contract = new ethers.Contract(contractAddress, abi, signer);
+                const web3 = new Web3(window.ethereum);
+                const contract = new web3.eth.Contract(abi, contractAddress);
 
                 try {
-                    const result = await contract.nomeFunzione();
+                    const accounts = await web3.eth.getAccounts();
+                    const result = await contract.methods.nomeFunzione().call({ from: accounts[0] });
                     alert('Risultato: ' + result);
                 } catch (error) {
                     console.error(error);
@@ -36,3 +36,4 @@
     </script>
 </body>
 </html>
+
